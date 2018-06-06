@@ -1,4 +1,4 @@
-"""empty message
+"""Create users model
 
 Revision ID: 26271dc6d4e1
 Revises: 

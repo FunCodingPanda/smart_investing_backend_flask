@@ -1,0 +1,6 @@
+A blueprint is a template for generating a "section" of a web application. Think of it like a mold:
+You can take the blueprint and apply it to your application in several places. Each time you apply it the blueprint will create a new version of its structure in the plaster of your application.
+
+http://flask.pocoo.org/docs/1.0/blueprints/
+
+- seperate the controller files from app.py
