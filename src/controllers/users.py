@@ -7,6 +7,9 @@ import re
 # from werkzeug.security import generate_password_hash, check_hash
 
 from src.models.users import User
+from src.models.stocks import Stock
+from src.models.holdings import Holding
+from src.models.transactions import Transaction
 from src.utils.auth import encode_auth_token
 
 # app.config['SECRET_KEY'] = 'thisissecret'
@@ -32,7 +35,6 @@ def get_one_user(user_id):
 @users_controller.route('/users', methods=['POST'])
 def create_user():
     request_body = request.get_json()
-    print(request_body)
     if request_body.get('name') is None:
         return jsonify({'error': 'Name is required'}), 400
     elif len(request_body['name']) < 4:
@@ -61,3 +63,61 @@ def create_user():
             'access_token': auth_token.decode()
         }
     }), 201
+
+
+@users_controller.route('/users/<int:user_id>/holdings', methods=['GET'])
+def get_user_holdings(user_id):
+    holdings = []
+    for holding, stock in db.session.query(Holding, Stock) \
+                                    .filter(Holding.stock_id == Stock.id) \
+                                    .filter(Holding.user_id == user_id) \
+                                    .filter(Holding.quantity > 0) \
+                                    .all():
+        holdings.append({
+            'quantity': holding.quantity,
+            'avg_purchase_price': holding.avg_purchase_price,
+            'ticker_symbol': stock.ticker_symbol,
+            'name': stock.name
+        })
+    return jsonify(holdings)
+
+# JavaScript:
+# return knex('holdings')
+#   .join('stocks', 'stocks.id', 'holdings.stock_id')
+#   .select('holdings.quantity', 'stocks.ticker_symbol', 'stocks.name')
+#   .where('holdings.user_id', '=', user_id)
+#   .andWhere('quantity', '>', 0); // only select holdings with quantity > 0
+
+
+@users_controller.route('/users/<int:user_id>/transactions', methods=['GET'])
+def get_user_transactions(user_id):
+    transactions = []
+    for transaction, stock in db.session.query(Transaction, Stock) \
+                                        .filter(Transaction.stock_id == Stock.id)\
+                                        .filter(Transaction.user_id == user_id) \
+                                        .order_by(Transaction.created_at.desc()) \
+                                        .all():
+        transactions.append({
+            'quantity': transaction.quantity,
+            'price': transaction.price,
+            'total': transaction.quantity * transaction.price,
+            'ticker_symbol': stock.ticker_symbol,
+            'name': stock.name,
+            'created_at': transaction.created_at,
+            'type': transaction.type.name
+        })
+    return jsonify(transactions)
+
+
+# return knex('transactions')
+#     .join('stocks', 'stocks.id', 'transactions.stock_id')
+#     .select(
+#       'quantity',
+#       'price',
+#       'total',
+#       'ticker_symbol',
+#       'name',
+#       'transactions.created_at',
+#       'type')
+#     .where('transactions.user_id', '=', user_id)
+#     .orderBy('created_at', 'desc')

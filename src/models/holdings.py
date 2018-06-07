@@ -16,4 +16,14 @@ class Holding(db.Model):
     stock = db.relationship('Stock')
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow, default=datetime.utcnow)
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'quantity': self.quantity,
+            'avg_purchase_price': self.avg_purchase_price,
+            'user_id': self.user_id,
+            'stock_id': self.stock_id,
+            'created_at': self.created_at.isoformat()
+        }

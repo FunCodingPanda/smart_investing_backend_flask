@@ -4,3 +4,39 @@ You can take the blueprint and apply it to your application in several places. E
 http://flask.pocoo.org/docs/1.0/blueprints/
 
 - seperate the controller files from app.py
+
+
+
+
+
+
+
+Example python session:
+
+In [1]: from app import db
+
+In [2]: from src.models.transactions import Transaction
+
+In [3]: from src.models.users import User
+
+In [4]: from src.models.stocks import Stock
+
+In [5]: teddy = User.query.filter(User.name == 'Teddy').one()
+
+In [7]: stock = Stock.query.filter(Stock.ticker_symbol == 'MSFT').one()
+
+In [9]: from src.models.transactions import TransactionType
+
+In [10]: transaction = Transaction(type=TransactionType.buy, user=teddy, stock=stock, quantity=10, price=98.32)
+
+In [12]: db.session.add(transaction)
+
+In [13]: db.session.commit()
+
+In [14]: from src.models.holdings import Holding
+
+In [15]: holding = Holding(user=teddy, stock=stock, quantity=10, avg_purchase_price=98.32)
+
+In [16]: db.session.add(holding)
+
+In [17]: db.session.commit()
