@@ -46,4 +46,4 @@ class User(db.Model):
 #     'name': 'Sophie',
 #     'cash': 20000.00
 # }
-# sophie.check_password('teddy')
+# sophie.check_password('panda')

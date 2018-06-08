@@ -12,3 +12,11 @@ class DividendPayout(db.Model):
 
     dividend_id = db.Column(db.Integer, db.ForeignKey('dividends.id'))
     dividend = db.relationship('Dividend')
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'quantity': self.quantity,
+            'dividend_id': self.dividend_id,
+            'created_at': self.created_at.isoformat()
+        }

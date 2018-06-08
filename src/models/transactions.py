@@ -6,6 +6,7 @@ import enum
 class TransactionType(enum.Enum):
     buy = 1
     sell = 2
+    dividend = 3
 
 
 class Transaction(db.Model):

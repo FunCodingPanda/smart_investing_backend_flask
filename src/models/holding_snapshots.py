@@ -13,3 +13,11 @@ class HoldingSnapshot(db.Model):
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'portfolio_value': self.portfolio_value,
+            'user_id': self.user_id,
+            'created_at': self.created_at.isoformat()
+         }
