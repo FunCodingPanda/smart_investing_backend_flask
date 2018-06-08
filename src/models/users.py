@@ -35,3 +35,15 @@ class User(db.Model):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.hashed_password, password)
+
+
+# Example:
+# sophie = User('Sophie', 'sophie@panda.com', 'boogers')
+# sophie.as_dict()
+# {
+#     'id': 3,
+#     'email': 'sophie@panda.com',
+#     'name': 'Sophie',
+#     'cash': 20000.00
+# }
+# sophie.check_password('teddy')

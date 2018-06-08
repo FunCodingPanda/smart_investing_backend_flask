@@ -12,3 +12,12 @@ class Dividend(db.Model):
     stock = db.relationship('Stock', back_populates='dividends')
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
+
+    def as_dict(self):
+        return {
+            'id': self.id,
+            'amount_per_share': self.amount_per_share,
+            'payable_date': self.payable_date.isoformat(),
+            'stock_id': self.stock_id,
+            'created_at': self.created_at.isoformat()
+        }
