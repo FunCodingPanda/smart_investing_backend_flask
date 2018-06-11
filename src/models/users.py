@@ -10,7 +10,7 @@ class User(db.Model):
     name = db.Column(db.String)
     hashed_password = db.Column(db.String)
     cash = db.Column(db.Float)
-    dividend_payouts = db.relationship('DividendPayout', back_populates='user', passive_deletes=True)
+    pending_dividends = db.relationship('PendingDividend', back_populates='user', passive_deletes=True)
     holdings = db.relationship('Holding', back_populates='user', passive_deletes=True)
     holding_snapshots = db.relationship('HoldingSnapshot', back_populates='user', passive_deletes=True)
     transactions = db.relationship('Transaction', back_populates='user', passive_deletes=True)
@@ -29,8 +29,7 @@ class User(db.Model):
             'id': self.id,
             'email': self.email,
             'name': self.name,
-            'cash': self.cash,
-            # TODO: holdings, dividends, transactions, etc.
+            'cash': self.cash
         }
 
     def check_password(self, password):
