@@ -40,3 +40,7 @@ In [15]: holding = Holding(user=teddy, stock=stock, quantity=10, avg_purchase_pr
 In [16]: db.session.add(holding)
 
 In [17]: db.session.commit()
+
+- Double Checking: have a different function to assure that the dividends is paid incase if it does not pay out at 4:30 pm the end of business day
+
+- if pursue this, put it up on AWS

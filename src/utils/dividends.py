@@ -33,7 +33,7 @@ def get_dividends_by_ex_date(ex_date):
     data = requests.get('https://core-api.barchart.com/v1/earnings-dividends/get', params=params)
     return data.json().get('data', [])
 
-
+# https://core-api.barchart.com/v1/earnings-dividends/get?country=us&getDividends=true&fields=symbol%2Camount%2CexDivDate%2CpayableDate&startDate=2018-06-12&page=1&limit=100
 def find_and_give_pending_dividends():
     # 1. Look up the latest dividend info from the Barchart API
     next_market_day = get_next_market_day()
