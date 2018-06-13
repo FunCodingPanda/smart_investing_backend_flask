@@ -14,6 +14,13 @@ class HoldingSnapshot(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, onupdate=datetime.utcnow)
 
+    def __repr__(self):
+        """
+        This function is used for converting a `Stock` object into a string
+        representation. This is useful when writing queries in the terminal.
+        """
+        return "<HoldingSnapshot(id={}, user_id={}, portfolio_value={})>".format(self.id, self.user_id, self.portfolio_value)
+
     def as_dict(self):
         return {
             'id': self.id,

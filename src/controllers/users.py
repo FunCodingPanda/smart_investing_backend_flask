@@ -9,6 +9,7 @@ import re
 from src.models.users import User
 from src.models.stocks import Stock
 from src.models.holdings import Holding
+from src.models.holding_snapshots import HoldingSnapshot
 from src.models.transactions import Transaction
 from src.utils.auth import encode_auth_token
 
@@ -107,6 +108,17 @@ def get_user_transactions(user_id):
             'type': transaction.type.name
         })
     return jsonify(transactions)
+
+
+@users_controller.route('/users/<int:user_id>/holding_snapshots', methods=['GET'])
+def get_user_holding_snapshots(user_id):
+    snapshots = []
+    for snapshot in HoldingSnapshot.query \
+                                   .filter(HoldingSnapshot.user_id == user_id) \
+                                   .order_by(HoldingSnapshot.created_at.asc()).all():
+        timestamp = int(snapshot.created_at.timestamp() * 1000)
+        snapshots.append([timestamp, snapshot.portfolio_value])
+    return jsonify(snapshots)
 
 
 # return knex('transactions')

@@ -1,6 +1,8 @@
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
+from datetime import datetime
 
 from flask import Flask
 from flask_migrate import Migrate
@@ -20,6 +22,7 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 
 import src.utils.dividends
+import src.utils.net_worth
 import src.utils.seed
 
 from src.models.holding_snapshots import HoldingSnapshot
@@ -51,6 +54,12 @@ def initialize():
         trigger=CronTrigger(hour=16, minute=30, timezone='EST'),
         id='find_and_give_pending_dividends_job',
         name='Gives out pending dividends to eligible holders',
+        replace_existing=True)
+    scheduler.add_job(
+        func=src.utils.net_worth.update_all,
+        trigger=IntervalTrigger(hours=1, start_date=datetime.now()),
+        id='net_worth_job',
+        name='Calculate users net worth every hour',
         replace_existing=True)
     scheduler.add_job(
         func=src.utils.dividends.pay_dividends,
