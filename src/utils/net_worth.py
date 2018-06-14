@@ -7,6 +7,7 @@ from sqlalchemy.orm import subqueryload
 
 
 def update_all():
+    print("starting update")
     # 1. Look up all our stock tickers
     symbols_by_id = dict((s.id, s.ticker_symbol) for s in Stock.query.all())
 
@@ -19,6 +20,7 @@ def update_all():
         stock_prices[ticker_symbol] = price
 
     # 3. Look up each user and their current holdings
+    # http://docs.sqlalchemy.org/en/latest/orm/query.html
     users = User.query.options(subqueryload(User.holdings)).all()
 
     # 4. Calculate the value of their current holdings + their cash (ie. net worth)
@@ -34,7 +36,7 @@ def update_all():
 
     # 5. Write the data into the holdings snapshots table
     db.session.commit()
-
+    print("finished update")
 
 # symbols_by_id = {
 #     1: 'MSFT',

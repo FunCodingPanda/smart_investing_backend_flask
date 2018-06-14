@@ -19,5 +19,5 @@ def login():
             'auth': {'access_token': access_token.decode()},
             'user': user.as_dict()
         })
-    else:       
+    else:
         return jsonify({'error': 'Password was incorrect'}), 403

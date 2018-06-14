@@ -57,7 +57,7 @@ def initialize():
         replace_existing=True)
     scheduler.add_job(
         func=src.utils.net_worth.update_all,
-        trigger=IntervalTrigger(hours=1, start_date=datetime.now()),
+        trigger=IntervalTrigger(minutes=30, start_date=datetime.now()),
         id='net_worth_job',
         name='Calculate users net worth every hour',
         replace_existing=True)
